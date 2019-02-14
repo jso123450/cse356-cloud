@@ -18,3 +18,5 @@
         src: /cse356-cloud/hw1/hw0.html
         dest: /var/www/html
         mode: preserve
+    - name: remove local cloned copy
+      command: rm -rf /cse356-cloud/
