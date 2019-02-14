@@ -1,0 +1,21 @@
+---
+- hosts: hw1
+  become: yes
+  become_method: su
+  remote_user: ubuntu
+  tasks:
+    - name: install apache2
+      apt: 
+        name: apache2 
+        update_cache: yes
+    - name: clone git repo
+      git: 
+        repo: git@github.com:jso123450/cse356-cloud.git 
+        dest: /cse356-cloud/
+        key_file: /home/ubuntu/.ssh/id_rsa
+    - name: move hw0.html into the document root
+      copy: 
+        remote_src: yes
+        src: /cse356-cloud/hw1/hw0.html
+        dest: /var/www/html
+        mode: preserve
