@@ -45,3 +45,12 @@ def publish_on(key, msg):
 
     print(" [x] Sent %r:%r" % (key, msg))
     connection.close()
+
+if __name__ == "__main__":
+    keys = ["test"]
+    msg = "secret sent"
+    which = True
+    if which:
+        listen_on(keys)
+    else:
+        publish_on(keys[0],msg)
