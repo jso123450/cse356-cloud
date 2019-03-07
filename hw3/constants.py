@@ -1,0 +1,5 @@
+HOST = 'localhost'
+EXCHANGE = 'hw3'
+EXCHANGE_TYPE = 'direct'
+QUEUE = 'queue'
+ENCODING = 'utf-8'
