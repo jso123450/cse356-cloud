@@ -7,28 +7,30 @@ def hello():
 
 @app.route("/listen", methods=['POST'])
 def listen():
-	try:
-		data = request.get_json()
-		if data is None:
-			return "none"
-		else:
-			return jsonify(data)
-	except Exception as e:
-		print(e)
-		return "exception"
+	return "listening"
+	# try:
+	# 	data = request.get_json()
+	# 	if data is None:
+	# 		return "none"
+	# 	else:
+	# 		return jsonify(data)
+	# except Exception as e:
+	# 	print(e)
+	# 	return "exception"
     # return jsonify(data['keys'])
 
 @app.route("/speak", methods=['POST'])
 def speak():
-	try:
-		data = request.get_json()
-		if data is None:
-			return "none"
-		else:
-			return jsonify(data)
-	except Exception as e:
-		print(e)
-		return "exception"
+	return "speaking"
+	# try:
+	# 	data = request.get_json()
+	# 	if data is None:
+	# 		return "none"
+	# 	else:
+	# 		return jsonify(data)
+	# except Exception as e:
+	# 	print(e)
+	# 	return "exception"
     # return jsonify(data['msg'])
 
 if __name__ == "__main__":
