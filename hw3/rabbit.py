@@ -26,6 +26,7 @@ def listen_on(keys):
     res = ""
 
     def callback(ch, method, properties, body):
+        nonlocal res
         print(" [x] %r:%r" % (method.routing_key, body))
         res = body.decode(ENCODING)
         connection.close()
