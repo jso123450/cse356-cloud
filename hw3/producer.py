@@ -165,6 +165,7 @@ class RabbitProducer(object):
 
         """
         #self.setup_queue(QUEUE)
+        self.start_publishing()
 
     def setup_queue(self, queue_name):
         """Setup the queue on RabbitMQ by invoking the Queue.Declare RPC
