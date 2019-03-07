@@ -27,8 +27,8 @@ def listen():
 		keys = req_data[JSON_KEY_KEYS]
 		msg = listen_on(keys)
 		res[JSON_KEY_MSG] = msg
-	except:
-		return jsonify(STATUS_ERR)
+	# except:
+	# 	return jsonify(STATUS_ERR)
 	return jsonify(res)
 
 @app.route("/speak", methods=['POST'])
@@ -38,8 +38,8 @@ def speak():
 		key = req_data[JSON_KEY_KEY]
 		msg = req_data[JSON_KEY_MSG]
 		publish_on(key,msg)
-	except:
-		return jsonify(STATUS_ERR)
+	# except:
+	# 	return jsonify(STATUS_ERR)
 	return jsonify(STATUS_OK)
 
 if __name__ == "__main__":
