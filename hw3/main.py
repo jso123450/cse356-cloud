@@ -21,7 +21,8 @@ def listen():
 
 @app.route("/speak", methods=['POST'])
 def speak():
-	return "speaking"
+	req_data = request.get_json()
+	return jsonify(req_data)
 	# try:
 	# 	data = request.get_json()
 	# 	if data is None:
