@@ -13,8 +13,8 @@ def listen():
 			return "none"
 		else:
 			return jsonify(data)
-	except:
-		return "exception"
+	except Exception as e:
+		return e.__repr__
     # return jsonify(data['keys'])
 
 @app.route("/speak", methods=['POST'])
@@ -25,8 +25,8 @@ def speak():
 			return "none"
 		else:
 			return jsonify(data)
-	except:
-		return "exception"
+	except Exception as e:
+		return e.__repr__
     # return jsonify(data['msg'])
 
 if __name__ == "__main__":
