@@ -8,7 +8,7 @@ def hello():
 @app.route("/listen", methods=['POST'])
 def listen():
 	try:
-		data = request.json
+		data = request.get_json()
 		if data is None:
 			return "none"
 		else:
@@ -21,7 +21,7 @@ def listen():
 @app.route("/speak", methods=['POST'])
 def speak():
 	try:
-		data = request.json
+		data = request.get_json()
 		if data is None:
 			return "none"
 		else:
