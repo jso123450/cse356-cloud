@@ -22,22 +22,22 @@ def hello():
 @app.route("/listen", methods=['POST'])
 def listen():
 	res = {}
-	try:
-		req_data = request.get_json()
-		keys = req_data[JSON_KEY_KEYS]
-		msg = listen_on(keys)
-		res[JSON_KEY_MSG] = msg
+	# try:
+	req_data = request.get_json()
+	keys = req_data[JSON_KEY_KEYS]
+	msg = listen_on(keys)
+	res[JSON_KEY_MSG] = msg
 	# except:
 	# 	return jsonify(STATUS_ERR)
 	return jsonify(res)
 
 @app.route("/speak", methods=['POST'])
 def speak():
-	try:
-		req_data = request.get_json()
-		key = req_data[JSON_KEY_KEY]
-		msg = req_data[JSON_KEY_MSG]
-		publish_on(key,msg)
+	# try:
+	req_data = request.get_json()
+	key = req_data[JSON_KEY_KEY]
+	msg = req_data[JSON_KEY_MSG]
+	publish_on(key,msg)
 	# except:
 	# 	return jsonify(STATUS_ERR)
 	return jsonify(STATUS_OK)
