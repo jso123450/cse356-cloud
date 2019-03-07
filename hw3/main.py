@@ -23,7 +23,7 @@ app = Flask(__name__)
 @app.route("/")
 def hello():
 	print("got get req")
-    return "<h1 style='color:blue'>Hello There!</h1>"
+	return "<h1 style='color:blue'>Hello There!</h1>"
 
 @app.route("/listen", methods=['POST'])
 def listen():
