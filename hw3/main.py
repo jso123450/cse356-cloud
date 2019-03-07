@@ -26,6 +26,7 @@ def hello():
 
 @app.route("/listen", methods=['POST'])
 def listen():
+	print("got listen req")
 	res = {}
 	try:
 		req_data = request.get_json()
@@ -38,6 +39,7 @@ def listen():
 
 @app.route("/speak", methods=['POST'])
 def speak():
+	print("got speak req")
 	try:
 		req_data = request.get_json()
 		key = req_data[JSON_KEY_KEY]
