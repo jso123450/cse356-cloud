@@ -19,18 +19,20 @@ def listen_on(keys):
                         queue=queue_name,
                         routing_key=binding_key)
 
-    print(' [*] Waiting for message. To exit press CTRL+C')
+    # print(' [*] Waiting for message. To exit press CTRL+C')
 
     # frame, properties, body = channel.basic_get(queue=queue_name)
+    res = ""
 
     def callback(ch, method, properties, body):
         print(" [x] %r:%r" % (method.routing_key, body))
+        res = str(body)
         connection.close()
 
     channel.basic_consume(callback,
                         queue=queue_name)
-
     channel.start_consuming()
+    return res
 
 def publish_on(key, msg):
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=HOST))
@@ -43,7 +45,7 @@ def publish_on(key, msg):
                         routing_key=key,
                         body=msg)
 
-    print(" [x] Sent %r:%r" % (key, msg))
+    # print(" [x] Sent %r:%r" % (key, msg))
     connection.close()
 
 if __name__ == "__main__":
