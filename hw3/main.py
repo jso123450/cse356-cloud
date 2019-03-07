@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
-from consumer import listen_on
-from producer import publish_on
+# from consumer import listen_on
+# from producer import publish_on
+from rabbit import listen_on, publish_on
 # from constants import JSON_KEY_STATUS, JSON_KEY_KEY, JSON_KEY_KEYS, JSON_KEY_MSG, JSON_VAL_ERR, \
 # 						JSON_VAL_OK, STATUS_ERR, STATUS_OK
 
@@ -37,13 +38,13 @@ def listen():
 
 @app.route("/speak", methods=['POST'])
 def speak():
-	# try:
-	req_data = request.get_json()
-	key = req_data[JSON_KEY_KEY]
-	msg = req_data[JSON_KEY_MSG]
-	publish_on(key,msg)
-	# except:
-	# 	return jsonify(STATUS_ERR)
+	try:
+		req_data = request.get_json()
+		key = req_data[JSON_KEY_KEY]
+		msg = req_data[JSON_KEY_MSG]
+		publish_on(key,msg)
+	except:
+		return jsonify(STATUS_ERR)
 	return jsonify(STATUS_OK)
 
 if __name__ == "__main__":
