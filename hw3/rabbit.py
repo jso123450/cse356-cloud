@@ -3,6 +3,7 @@ import pika
 HOST = 'localhost'
 EXCHANGE = 'hw3'
 EXCHANGE_TYPE = 'direct'
+ENCODING = 'utf-8'
 
 def listen_on(keys):
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=HOST))
@@ -26,7 +27,7 @@ def listen_on(keys):
 
     def callback(ch, method, properties, body):
         print(" [x] %r:%r" % (method.routing_key, body))
-        res = str(body)
+        res = body.decode(ENCODING)
         connection.close()
 
     channel.basic_consume(callback,

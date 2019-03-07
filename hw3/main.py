@@ -1,5 +1,8 @@
 from flask import Flask, jsonify, request
 from rabbit import listen_on, publish_on
+
+import threading
+
 app = Flask(__name__)
 
 JSON_KEY_STATUS = 'status'
@@ -22,24 +25,24 @@ def hello():
 @app.route("/listen", methods=['POST'])
 def listen():
 	res = {}
-	# try:
-	req_data = request.get_json()
-	keys = req_data[JSON_KEY_KEYS]
-	msg = listen_on(keys)
-	res[JSON_KEY_MSG] = msg
-	# except:
-	# 	return jsonify(STATUS_ERR)
+	try:
+		req_data = request.get_json()
+		keys = req_data[JSON_KEY_KEYS]
+		msg = listen_on(keys)
+		res[JSON_KEY_MSG] = msg
+	except:
+		return jsonify(STATUS_ERR)
 	return jsonify(res)
 
 @app.route("/speak", methods=['POST'])
 def speak():
-	# try:
-	req_data = request.get_json()
-	key = req_data[JSON_KEY_KEY]
-	msg = req_data[JSON_KEY_MSG]
-	publish_on(key,msg)
-	# except:
-	# 	return jsonify(STATUS_ERR)
+	try:
+		req_data = request.get_json()
+		key = req_data[JSON_KEY_KEY]
+		msg = req_data[JSON_KEY_MSG]
+		publish_on(key,msg)
+	except:
+		return jsonify(STATUS_ERR)
 	return jsonify(STATUS_OK)
 
 if __name__ == "__main__":
