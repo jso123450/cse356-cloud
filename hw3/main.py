@@ -37,13 +37,13 @@ def listen():
 
 @app.route("/speak", methods=['POST'])
 def speak():
-	try:
-		req_data = request.get_json()
-		key = req_data[JSON_KEY_KEY]
-		msg = req_data[JSON_KEY_MSG]
-		publish_on(key,msg)
-	except:
-		return jsonify(STATUS_ERR)
+	# try:
+	req_data = request.get_json()
+	key = req_data[JSON_KEY_KEY]
+	msg = req_data[JSON_KEY_MSG]
+	publish_on(key,msg)
+	# except:
+	# 	return jsonify(STATUS_ERR)
 	return jsonify(STATUS_OK)
 
 if __name__ == "__main__":
