@@ -61,7 +61,7 @@ app.post('/deposit', upload.single(constants.KEY_CONTENTS), async(req, res) => {
 app.get('/retrieve', async(req, res) => {
     let response = generateERR();
 
-    let filename = req.body.filename;
+    let filename = (req.body.filename == undefined) ? req.query.filename : req.body.filename;
 
     console.log(`Received /retrieve request with ${filename}`);
 
