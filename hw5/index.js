@@ -76,8 +76,9 @@ app.get('/retrieve', async(req, res) => {
     let mime = undefined;
     console.log(`${SELECT_STATEMENT}, ${params}`);
     let results = await client.execute(SELECT_STATEMENT, params, {prepare: true});
-    file = results[0].contents;
-    mime = results[0].mime;
+    console.log(results);
+    file = results.rows[0].contents;
+    mime = results.rows[0].mime;
 
     if (file == undefined || mime == undefined){
         response[constants.STATUS_ERR] = constants.ERR_FILE_DOESNT_EXIST;
