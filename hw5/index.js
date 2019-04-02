@@ -40,8 +40,10 @@ app.post('/deposit', upload.single(constants.KEY_CONTENTS), async(req, res) => {
     let response = generateERR();
 
     let filename = req.body.filename;
-    let file = req.file;
+    let file = req.file.buffer;
     let mime = req.file.mimetype;
+
+    console.log(`Received /deposit request with ${filename}, ${mime}`);
 
     if (filename == undefined || file == undefined || mime == undefined){
         response[constants.STATUS_ERR] = constants.ERR_MISSING_PARAMS;
@@ -61,6 +63,8 @@ app.get('/retrieve', async(req, res) => {
 
     let filename = req.body.filename;
 
+    console.log(`Received /retrieve request with ${filename}`);
+
     if (filename == undefined){
         response[constants.STATUS_ERR] = constants.ERR_MISSING_PARAMS;
         return res.json(response);
@@ -70,12 +74,10 @@ app.get('/retrieve', async(req, res) => {
 
     let file = undefined;
     let mime = undefined;
-    client.execute(SELECT_STATEMENT, params)
-        .then((result) => { 
-                file = result.rows[0].contents;
-                mime = result.rows[0].mime;
-            });
-    
+    let results = await client.execute(SELECT_STATEMENT, params, {prepare: true});
+    file = results[0].contents;
+    mime = results[0].mime;
+
     if (file == undefined || mime == undefined){
         response[constants.STATUS_ERR] = constants.ERR_FILE_DOESNT_EXIST;
         return res.json(response);

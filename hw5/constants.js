@@ -1,4 +1,8 @@
 module.exports = {
+    STATUS_KEY: 'status',
+    STATUS_OK: 'OK',
+    STATUS_ERR: 'error',
+    
     LOCALHOST: '127.0.0.1',
     CASSANDRA_PORT: '9042',
     CASSANDRA_DATACENTER: 'datacenter1',
