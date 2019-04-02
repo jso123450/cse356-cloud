@@ -74,6 +74,7 @@ app.get('/retrieve', async(req, res) => {
 
     let file = undefined;
     let mime = undefined;
+    console.log(`${SELECT_STATEMENT}, ${params}`);
     let results = await client.execute(SELECT_STATEMENT, params, {prepare: true});
     file = results[0].contents;
     mime = results[0].mime;
