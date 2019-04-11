@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('promise-mysql');
 const constants = require('./constants');
 
 const cnxn = mysql.createConnection({
@@ -27,56 +27,39 @@ function generateQuery(club, pos, max){
     return query;
 }
 
-async function getAvgAssists(club, pos){
-    let result = null;
-    try {
-        await cnxn.connect();
-        result = await cnxn.query(generateAAQuery(club,pos));
-    }
-    catch(err){
-        throw err;
-    }
-    finally {
-        await cnxn.end();
-    }
-    console.log(result);
-    return result[0].aa;
-}
-
-async function getMaxAssists(club, pos){
-    let result = null;
-    try {
-        await cnxn.connect();
-        result = await cnxn.query(generateMAQuery(club,pos));
-    }
-    catch(err){
-        throw err;
-    }
-    finally {
-        await cnxn.end();
-    }
-    console.log(result);
-    return result[0].ma;
-}
-
 async function getStarPlayer(club, pos, max_assists){
     let result = null;
-    try {
-        await cnxn.connect();
-        result = await cnxn.query(generateQuery(club,pos,max_assists));
-    }
-    catch(err) {
-        throw err;
-    } 
-    finally {
-        await cnxn.end();
-    }
+    let avg_assists = null;
+    let max_assists = null;
+    let player = null;
+    cnxn.connect()
+        .then(function(smth){
+            return cnxn.query(generateAAQuery(club,pos));
+        }).then(function(rows){
+            console.log(rows);
+            avg_assists = rows[0];
+            return cnxn.query(generateMAQuery(club,pos));
+        }).then(function(rows) {
+            console.log(rows);
+            max_assists = rows[0];
+            return cnxn.query(generateQuery(club,pos,max_assists));
+        }).then(function(rows){
+            console.log(rows);
+            player = rows[0];
+            result = {
+                [constants.CLUB_KEY]: club,
+                [constants.POS_KEY]: pos,
+                [constants.MAX_ASSISTS_KEY]: max_assists,
+                [constants.PLAYER_KEY]: player,
+                [constants.AVG_ASSISTS_KEY]: avg_assists
+            };
+        }).catch(function(err){
+            console.log(err);
+        });
     console.log(result);
-    return result[0];
+    return result;
 }
 
 module.exports = {
-    getAvgAssists: getAvgAssists,
-    getMaxAssists: getMaxAssists,
     getStarPlayer: getStarPlayer
 };

@@ -25,19 +25,17 @@ app.post('/hw7', async(req, res) => {
         return res.json(response.toOBJ());
     }
 
-    let avg_assists = await database.getAvgAssists(club, pos);
-    console.log(avg_assists);
-    let max_assists = await database.getMaxAssists(club, pos);
-    console.log(max_assists);
     let star_player = await database.getStarPlayer(club, pos, max_assists);
     console.log(star_player);
 
-    response.club = club;
-    response.pos = pos;
-    response.max_assists = max_assists;
-    response.player = star_player;
-    response.avg_assists = avg_assists;
-    return res.json(response.toOBJ());
+    return res.json(star_player);
+    // response.club = star_player[constants.CLUB_KEY];
+    // response.pos = star_player[constants.POS_KEY];
+    // response.max_assists = star_player[constants.MAX_ASSISTS_KEY];
+    // response.player = star_player[constants.PLAYER_KEY];
+    // response.avg_assists = star_player[constants.AVG_ASSISTS_KEY];
+
+    // return res.json(response.toOBJ());
 });
 
 /* Start the server. */
