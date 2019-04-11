@@ -25,7 +25,7 @@ app.post('/hw7', async(req, res) => {
         return res.json(response.toOBJ());
     }
 
-    let star_player = await database.getStarPlayer(club, pos, max_assists);
+    let star_player = await database.getStarPlayer(club, pos);
     console.log(star_player);
 
     return res.json(star_player);

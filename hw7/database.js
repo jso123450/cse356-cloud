@@ -27,7 +27,7 @@ function generateQuery(club, pos, max){
     return query;
 }
 
-async function getStarPlayer(club, pos, max_assists){
+async function getStarPlayer(club, pos){
     let result = null;
     let avg_assists = null;
     let max_assists = null;
