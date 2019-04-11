@@ -64,7 +64,6 @@ async function getStarPlayer(club, pos, max_assists){
     try {
         await cnxn.connect();
         result = await cnxn.query(generateQuery(club,pos,max_assists));
-        console.log(result);
     }
     catch(err) {
         throw err;
