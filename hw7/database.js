@@ -45,6 +45,7 @@ async function getStarPlayer(club, pos){
             cnxn = conn;
             try {
                 avg_assists = await mc.get(aa_cache);
+                avg_assists = avg_assists.value;
                 console.log(`found cached ${aa_cache} ${avg_assists}`)
                 cached = true;
             } catch(err){
@@ -73,6 +74,7 @@ async function getStarPlayer(club, pos){
 
             try {
                 max_assists = await mc.get(ma_cache);
+                max_assists = max_assists.value;
                 console.log(`found cached ${ma_cache} ${max_assists}`)
                 cached = true;
             } catch(err) {
@@ -101,6 +103,7 @@ async function getStarPlayer(club, pos){
 
             try {
                 player = await mc.get(player_cache);
+                player = player.value;
                 console.log(`found cached ${player_cache} ${player}`)
                 cached = true;
             } catch(err){
