@@ -1,0 +1,23 @@
+CREATE TABLE assists (
+    player VARCHAR(255),
+    club VARCHAR(5),
+    pos VARCHAR(5),
+    gp INT,
+    gs INT,
+    a INT,
+    gwa INT,
+    hma INT,
+    rda INT,
+    a90 DECIMAL(4,2),
+    PRIMARY KEY (player)
+);
+
+LOAD DATA
+    INFILE '/var/lib/mysql-files/assists.csv'
+    INTO TABLE assists
+    CHARACTER SET UTF8
+    FIELDS
+        TERMINATED BY ','
+    LINES 
+        TERMINATED BY '\n'
+    IGNORE 1 LINES
