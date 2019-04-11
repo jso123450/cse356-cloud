@@ -42,19 +42,19 @@ async function getStarPlayer(club, pos){
             return cnxn.query(query);
         }).then(function(rows){
             console.log(rows);
-            avg_assists = rows[0];
+            avg_assists = rows[0].aa;
             query = generateMAQuery(club,pos);
             console.log(query);
             return cnxn.query(query);
         }).then(function(rows) {
             console.log(rows);
-            max_assists = rows[0];
+            max_assists = rows[0].ma;
             query = generateQuery(club,pos,max_assists);
             console.log(query);
             return cnxn.query(query);
         }).then(function(rows){
             console.log(rows);
-            player = rows[0];
+            player = rows[0].player;
             result = {
                 [constants.CLUB_KEY]: club,
                 [constants.POS_KEY]: pos,
