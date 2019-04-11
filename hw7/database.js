@@ -118,7 +118,7 @@ async function getStarPlayer(club, pos){
                 console.log(err);
             }
 
-            let result = {
+            let star_player = {
                 [constants.CLUB_KEY]: club,
                 [constants.POS_KEY]: pos,
                 [constants.MAX_ASSISTS_KEY]: max_assists,
@@ -126,7 +126,7 @@ async function getStarPlayer(club, pos){
                 [constants.AVG_ASSISTS_KEY]: avg_assists
             };
             cnxn.end();
-            return result;
+            return star_player;
         }).catch(function(err){
             console.log(err);
             if (cnxn && cnxn.end) cnxn.end();
