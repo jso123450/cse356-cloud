@@ -29,13 +29,6 @@ app.post('/hw7', async(req, res) => {
     console.log(star_player);
 
     return res.json(star_player);
-    // response.club = star_player[constants.CLUB_KEY];
-    // response.pos = star_player[constants.POS_KEY];
-    // response.max_assists = star_player[constants.MAX_ASSISTS_KEY];
-    // response.player = star_player[constants.PLAYER_KEY];
-    // response.avg_assists = star_player[constants.AVG_ASSISTS_KEY];
-
-    // return res.json(response.toOBJ());
 });
 
 /* Start the server. */
