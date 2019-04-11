@@ -14,17 +14,17 @@ const QUERY_STATEMENT = `SELECT player, gs FROM ${constants.MYSQL_TABLE}`;
 
 function generateAAQuery(club, pos){
     let query = AVG_ASSISTS_STATEMENT + ` WHERE club='${club}' and pos='${pos}'`;
-    return query;
+    return query.replace(/\\"/g, '"');
 }
 
 function generateMAQuery(club, pos){
     let query = MAX_ASSISTS_STATEMENT + ` WHERE club='${club}' and pos='${pos}'`;
-    return query;
+    return query.replace(/\\"/g, '"');
 }
 
 function generateQuery(club, pos, max){
     let query = QUERY_STATEMENT + ` WHERE club='${club}' and pos='${pos}' and a=${max} ORDER BY gs DESC LIMIT 1`;
-    return query;
+    return query.replace(/\\"/g, '"');
 }
 
 async function getStarPlayer(club, pos){
@@ -32,19 +32,26 @@ async function getStarPlayer(club, pos){
     let avg_assists = null;
     let max_assists = null;
     let player = null;
+    let query = null;
     let cnxn;
     mysql.createConnection(config)
         .then(function(conn){
             cnxn = conn;
-            return cnxn.query(generateAAQuery(club,pos));
+            query = generateAAQuery(club,pos);
+            console.log(query);
+            return cnxn.query(query);
         }).then(function(rows){
             console.log(rows);
             avg_assists = rows[0];
-            return cnxn.query(generateMAQuery(club,pos));
+            query = generateMAQuery(club,pos);
+            console.log(query);
+            return cnxn.query(query);
         }).then(function(rows) {
             console.log(rows);
             max_assists = rows[0];
-            return cnxn.query(generateQuery(club,pos,max_assists));
+            query = generateQuery(club,pos,max_assists);
+            console.log(query);
+            return cnxn.query(query);
         }).then(function(rows){
             console.log(rows);
             player = rows[0];
