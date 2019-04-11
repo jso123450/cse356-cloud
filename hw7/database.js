@@ -74,7 +74,7 @@ async function getStarPlayer(club, pos){
             player = rows[0]['player'];
             let cached_data = '' + avg_assists + ',' + max_assists + ',' + player;
             try {
-                await mc.set('sp,' + club + ',' + pos, cached_data, {expires: 600});
+                await mc.set('sp,' + club + ',' + pos, cached_data, {expires: 6000});
             } catch(err){
                 // do nothing
             }
