@@ -41,20 +41,20 @@ async function getStarPlayer(club, pos){
             console.log(query);
             return cnxn.query(query);
         }).then(function(rows){
-            console.log(rows);
             avg_assists = rows[0]['AA'];
+            console.log(avg_assists);
             query = generateMAQuery(club,pos);
             console.log(query);
             return cnxn.query(query);
         }).then(function(rows) {
-            console.log(rows);
             max_assists = rows[0]['MA'];
+            console.log(max_assists);
             query = generateQuery(club,pos,max_assists);
             console.log(query);
             return cnxn.query(query);
         }).then(function(rows){
-            console.log(rows);
             player = rows[0]['player'];
+            console.log(player);
             result = {
                 [constants.CLUB_KEY]: club,
                 [constants.POS_KEY]: pos,
@@ -62,6 +62,7 @@ async function getStarPlayer(club, pos){
                 [constants.PLAYER_KEY]: player,
                 [constants.AVG_ASSISTS_KEY]: avg_assists
             };
+            console.log(result);
             cnxn.end();
         }).catch(function(err){
             console.log(err);
