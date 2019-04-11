@@ -1,12 +1,12 @@
 const mysql = require('promise-mysql');
 const constants = require('./constants');
 
-const cnxn = mysql.createConnection({
+const config = {
     host: constants.MYSQL_HOST,
     user: constants.MYSQL_USER,
     password: constants.MYSQL_PW,
     database: constants.MYSQL_DB
-});
+};
 
 const MAX_ASSISTS_STATEMENT = `SELECT MAX(a) as MA FROM ${constants.MYSQL_TABLE};`
 const AVG_ASSISTS_STATEMENT = `SELECT AVG(a) as AA FROM ${constants.MYSQL_TABLE}`;
@@ -32,8 +32,10 @@ async function getStarPlayer(club, pos){
     let avg_assists = null;
     let max_assists = null;
     let player = null;
-    cnxn.connect()
-        .then(function(smth){
+    let cnxn;
+    mysql.createConnection(config)
+        .then(function(conn){
+            cnxn = conn;
             return cnxn.query(generateAAQuery(club,pos));
         }).then(function(rows){
             console.log(rows);
@@ -53,8 +55,10 @@ async function getStarPlayer(club, pos){
                 [constants.PLAYER_KEY]: player,
                 [constants.AVG_ASSISTS_KEY]: avg_assists
             };
+            cnxn.end();
         }).catch(function(err){
             console.log(err);
+            if (cnxn && cnxn.end) cnxn.end();
         });
     console.log(result);
     return result;
