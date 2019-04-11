@@ -38,7 +38,7 @@ async function getStarPlayer(club, pos){
     let cached = false;
     let cnxn;
     return mysql.createConnection(config)
-        .then(function(conn){
+        .then(async function(conn){
             cnxn = conn;
             try {
                 avg_assists = await mc.get(`aa,${club},${pos}`);
@@ -51,7 +51,7 @@ async function getStarPlayer(club, pos){
             }
             query = generateAAQuery(club,pos);
             return cnxn.query(query);
-        }).then(function(result){
+        }).then(async function(result){
             if (cached){
                 cached = false;
             }
@@ -77,7 +77,7 @@ async function getStarPlayer(club, pos){
             }
             query = generateMAQuery(club,pos);
             return cnxn.query(query);
-        }).then(function(result) {
+        }).then(async function(result) {
             if (cached){
                 cached = false;
             }
@@ -103,7 +103,7 @@ async function getStarPlayer(club, pos){
             }
             query = generateQuery(club,pos,max_assists);
             return cnxn.query(query);
-        }).then(function(result){
+        }).then(async function(result){
             if (cached){
                 cached = false;
             }
