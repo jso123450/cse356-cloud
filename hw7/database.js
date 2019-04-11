@@ -1,4 +1,5 @@
 const mysql = require('promise-mysql');
+const memjs = require('memjs');
 const constants = require('./constants');
 
 const config = {
@@ -7,6 +8,8 @@ const config = {
     password: constants.MYSQL_PW,
     database: constants.MYSQL_DB
 };
+
+const mc = memjs.Client.create(constants.MEMCACHED_SERVER);
 
 const MAX_ASSISTS_STATEMENT = `SELECT MAX(a) as MA FROM ${constants.MYSQL_TABLE}`
 const AVG_ASSISTS_STATEMENT = `SELECT AVG(a) as AA FROM ${constants.MYSQL_TABLE}`;
@@ -32,28 +35,89 @@ async function getStarPlayer(club, pos){
     let max_assists = null;
     let player = null;
     let query = null;
+    let cached = false;
     let cnxn;
     return mysql.createConnection(config)
         .then(function(conn){
             cnxn = conn;
+            try {
+                avg_assists = await mc.get(`aa,${club},${pos}`);
+                cached = true;
+            } catch(err){
+                console.log(`aa,${club},${pos} not cached`);
+            }
+            if (cached){
+                return avg_assists;
+            }
             query = generateAAQuery(club,pos);
-            console.log(query);
             return cnxn.query(query);
-        }).then(function(rows){
-            avg_assists = rows[0]['AA'];
-            console.log(avg_assists);
+        }).then(function(result){
+            if (cached){
+                cached = false;
+            }
+            else {
+                avg_assists = result[0]['AA'];
+            }
+
+            try {
+                await mc.set(`aa,${club},${pos}`, avg_assists);
+            } catch (err){
+                console.log(`couldn't set aa,${club},${pos}`);
+                console.log(err);
+            }
+
+            try {
+                max_assists = await mc.get(`ma,${club},${pos}`);
+                cached = true;
+            } catch(err) {
+                console.log(`ma,${club},${pos} not cached`)
+            }
+            if (cached){
+                return max_assists;
+            }
             query = generateMAQuery(club,pos);
-            console.log(query);
             return cnxn.query(query);
-        }).then(function(rows) {
-            max_assists = rows[0]['MA'];
-            console.log(max_assists);
+        }).then(function(result) {
+            if (cached){
+                cached = false;
+            }
+            else {
+                max_assists = result[0]['MA'];
+            }
+
+            try {
+                await mc.set(`ma,${club},${pos}`, max_assists);
+            } catch (err){
+                console.log(`couldn't set ma,${club},${pos}`);
+                console.log(err);
+            }
+
+            try {
+                player = await mc.get(`player,${club},${pos}`);
+                cached = true;
+            } catch(err){
+                console.log(`player,${club},${pos} not cached`)
+            }
+            if (cached){
+                return player;
+            }
             query = generateQuery(club,pos,max_assists);
-            console.log(query);
             return cnxn.query(query);
-        }).then(function(rows){
-            player = rows[0]['player'];
-            console.log(player);
+        }).then(function(result){
+            if (cached){
+                cached = false;
+            }
+            else {
+                player = result[0]['player'];
+            }
+
+            try {
+                await mc.set(`player,${club},${pos}`, player);
+            } catch (err){
+                console.log(`couldn't set ma,${club},${pos}`);
+                console.log(err);
+            }
+
             let result = {
                 [constants.CLUB_KEY]: club,
                 [constants.POS_KEY]: pos,

@@ -12,6 +12,7 @@ module.exports = {
     MYSQL_PW: 'CSE356hw7!',
     MYSQL_DB: 'hw7',
     MYSQL_TABLE: 'assists',
+    MEMCACHED_SERVER: '127.0.0.1:11211',
 
     ERR_MISSING_PARAMS: 'Required parameters are missing.',
     ERR_PARAM_INVALID: 'One or more specified parameter(s) are invalid.'
