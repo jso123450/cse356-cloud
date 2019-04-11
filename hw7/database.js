@@ -40,17 +40,7 @@ async function getStarPlayer(club, pos){
         star_player = await mc.get(sp_cache);
         star_player = star_player.value;
         if (star_player){
-            let arr = star_player.split(',');
-            avg_assists = arr[0];
-            max_assists = arr[1];
-            player = arr[2];
-            return {
-                [constants.CLUB_KEY]: club,
-                [constants.POS_KEY]: pos,
-                [constants.MAX_ASSISTS_KEY]: max_assists,
-                [constants.PLAYER_KEY]: player,
-                [constants.AVG_ASSISTS_KEY]: avg_assists
-            };
+            return star_player.toJSON();
         }
     } catch(err){
         // do nothing
@@ -72,12 +62,6 @@ async function getStarPlayer(club, pos){
             return cnxn.query(query);
         }).then(async function(rows){
             player = rows[0]['player'];
-            let cached_data = '' + avg_assists + ',' + max_assists + ',' + player;
-            try {
-                await mc.set('sp,' + club + ',' + pos, cached_data, {expires: 6000});
-            } catch(err){
-                // do nothing
-            }
             let result = {
                 [constants.CLUB_KEY]: club,
                 [constants.POS_KEY]: pos,
@@ -85,6 +69,12 @@ async function getStarPlayer(club, pos){
                 [constants.PLAYER_KEY]: player,
                 [constants.AVG_ASSISTS_KEY]: avg_assists
             };
+            let cached_data = JSON.stringify(result);
+            try {
+                await mc.set('sp,' + club + ',' + pos, cached_data, {expires: 6000});
+            } catch(err){
+                // do nothing
+            }
             cnxn.end();
             return result;
         }).catch(function(err){
