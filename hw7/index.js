@@ -15,7 +15,7 @@ app.use(express.json());
 /* endpoints */
 
 // /hw7?club=CLUB&pos=POS
-app.post('/hw7', async(req, res) => {
+app.get('/hw7', async(req, res) => {
     let response = new APIResponse();
     let club = req.query.club;
     let pos = req.query.pos;
