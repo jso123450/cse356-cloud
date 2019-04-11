@@ -26,7 +26,7 @@ app.get('/hw7', async(req, res) => {
     }
 
     let star_player = await database.getStarPlayer(club, pos);
-    console.log(star_player);
+    //console.log(star_player);
 
     return res.json(star_player);
 });
