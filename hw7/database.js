@@ -32,38 +32,64 @@ function generateQuery(club, pos, max){
 
 async function getStarPlayer(club, pos){
     let avg_assists = null;
+    try {
+        avg_assists = await mc.get(aa_cache);
+        avg_assists = avg_assists.value;
+        if (avg_assists){
+            avg_assists = avg_assists.readDoubleLE(0);
+            //console.log(`found cached ${aa_cache} ${avg_assists}`);
+        }
+    } catch(err){
+        // do nothing
+    }
     let max_assists = null;
+    try {
+        max_assists = await mc.get(ma_cache);
+        max_assists = max_assists.value;
+        if (max_assists){
+            max_assists = max_assists.readUInt16LE(0);
+            //console.log(`found cached ${ma_cache} ${max_assists}`)
+        }
+    } catch(err){
+        // do nothing
+    }
     let player = null;
+    try {
+        player = await mc.get(player_cache);
+        player = player.value;
+        if (player){
+            player = player.toString();
+            //console.log(`found cached ${player_cache} ${player}`)
+        }
+    } catch(err){
+        // do nothing
+    }
     let query = null;
     let cached = false;
     let aa_cache = `aa,${club},${pos}`.toString();
     let ma_cache = `ma,${club},${pos}`.toString();
     let player_cache = `player,${club},${pos}`.toString();
     let cnxn;
+    if (avg_assists && max_assists && player){
+        let star_player = {
+            [constants.CLUB_KEY]: club,
+            [constants.POS_KEY]: pos,
+            [constants.MAX_ASSISTS_KEY]: max_assists,
+            [constants.PLAYER_KEY]: player,
+            [constants.AVG_ASSISTS_KEY]: avg_assists
+        };
+        return star_player;
+    }
+
     return mysql.createConnection(config)
         .then(async function(conn){
             cnxn = conn;
-            try {
-                avg_assists = await mc.get(aa_cache);
-                avg_assists = avg_assists.value;
-                if (avg_assists){
-                    avg_assists = avg_assists.readDoubleLE(0);
-                    //console.log(`found cached ${aa_cache} ${avg_assists}`)
-                    cached = true;
-                }
-            } catch(err){
-                //console.log(`${aa_cache} not cached`);
-            }
-            if (cached){
+            if (avg_assists)
                 return avg_assists;
-            }
             query = generateAAQuery(club,pos);
             return cnxn.query(query);
         }).then(async function(result){
-            if (cached){
-                cached = false;
-            }
-            else {
+            if (!avg_assists){
                 avg_assists = result[0]['AA'];
                 try {
                     let buf = Buffer.allocUnsafe(8);
@@ -74,30 +100,19 @@ async function getStarPlayer(club, pos){
                     //console.log(`couldn't set aa_cache`);
                     //console.log(err);
                 }
-            }
-            //console.log(`avg_assists ${avg_assists}`);
-
-            try {
-                max_assists = await mc.get(ma_cache);
-                max_assists = max_assists.value;
-                if (max_assists){
-                    max_assists = max_assists.readUInt16LE(0);
-                    //console.log(`found cached ${ma_cache} ${max_assists}`)
-                    cached = true;
+            } else {
+                try {
+                    mc.touch(aa_cache, 600);
+                } catch(err){
+                    // do nothing
                 }
-            } catch(err) {
-                //console.log(`${ma_cache} not cached`)
             }
-            if (cached){
+            if (max_assists)
                 return max_assists;
-            }
             query = generateMAQuery(club,pos);
             return cnxn.query(query);
-        }).then(async function(result) {
-            if (cached){
-                cached = false;
-            }
-            else {
+        }).then(async function(result){
+            if (!max_assists){
                 max_assists = result[0]['MA'];
                 try {
                     let buf = Buffer.allocUnsafe(2);
@@ -108,30 +123,19 @@ async function getStarPlayer(club, pos){
                     //console.log(`couldn't set ${ma_cache}`);
                     //console.log(err);
                 }
-            }
-            //console.log(`max_assists ${max_assists}`);
-
-            try {
-                player = await mc.get(player_cache);
-                player = player.value;
-                if (player){
-                    player = player.toString();
-                    //console.log(`found cached ${player_cache} ${player}`)
-                    cached = true;
+            } else {
+                try {
+                    mc.touch(ma_cache, 600);
+                } catch(err){
+                    // do nothing
                 }
-            } catch(err){
-                //console.log(`${player_cache} not cached`)
             }
-            if (cached){
+            if (player)
                 return player;
-            }
             query = generateQuery(club,pos,max_assists);
             return cnxn.query(query);
         }).then(async function(result){
-            if (cached){
-                cached = false;
-            }
-            else {
+            if (!player){
                 player = result[0]['player'];
                 try {
                     await mc.set('player,' + club + ',' + pos, player, {expires: 600});
@@ -140,9 +144,14 @@ async function getStarPlayer(club, pos){
                     //console.log(`couldn't set ${ma_cache}`);
                     //console.log(err);
                 }
+            } else {
+                try {
+                    mc.touch(player_cache, 600);
+                } catch(err){
+                    // do nothing
+                }
             }
-            //console.log(`player ${player}`);
-
+            cnxn.end();
             let star_player = {
                 [constants.CLUB_KEY]: club,
                 [constants.POS_KEY]: pos,
@@ -150,7 +159,6 @@ async function getStarPlayer(club, pos){
                 [constants.PLAYER_KEY]: player,
                 [constants.AVG_ASSISTS_KEY]: avg_assists
             };
-            cnxn.end();
             return star_player;
         }).catch(function(err){
             //console.log(err);
