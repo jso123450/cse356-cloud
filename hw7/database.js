@@ -65,7 +65,7 @@ async function getStarPlayer(club, pos){
             }
             console.log(`avg_assists ${avg_assists}`);
             try {
-                await mc.set(aa_cache, {expires: 600}, avg_assists);
+                await mc.set(aa_cache, avg_assists, {expires: 600});
                 console.log(`cached ${aa_cache}`);
             } catch (err){
                 console.log(`couldn't set aa_cache`);
@@ -94,7 +94,7 @@ async function getStarPlayer(club, pos){
             }
             console.log(`max_assists ${max_assists}`);
             try {
-                await mc.set(ma_cache, {expires: 600}, max_assists);
+                await mc.set(ma_cache, max_assists, {expires: 600});
                 console.log(`cached ${ma_cache}`);
             } catch (err){
                 console.log(`couldn't set ${ma_cache}`);
@@ -123,7 +123,7 @@ async function getStarPlayer(club, pos){
             }
             console.log(`player ${player}`);
             try {
-                await mc.set(player_cache, {expires: 600}, player);
+                await mc.set(player_cache, player, {expires: 600});
                 console.log(`cached ${player_cache}`);
             } catch (err){
                 console.log(`couldn't set ${ma_cache}`);
