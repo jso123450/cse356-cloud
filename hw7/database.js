@@ -79,7 +79,7 @@ async function getStarPlayer(club, pos){
                 max_assists = await mc.get(ma_cache);
                 max_assists = max_assists.value;
                 if (max_assists){
-                    max_assists = max_assists.readInt16LE(0);
+                    max_assists = max_assists.readUInt16LE(0);
                     console.log(`found cached ${ma_cache} ${max_assists}`)
                     cached = true;
                 }
@@ -98,7 +98,9 @@ async function getStarPlayer(club, pos){
             else {
                 max_assists = result[0]['MA'];
                 try {
-                    await mc.set('ma,' + club + ',' + pos, max_assists, {expires: 600});
+                    let buf = Buffer.allocUnsafe(2);
+                    max_assists_buffer.writeUInt16LE(max_assists);
+                    await mc.set('ma,' + club + ',' + pos, buf, {expires: 600});
                     console.log(`cached ${ma_cache}`);
                 } catch (err){
                     console.log(`couldn't set ${ma_cache}`);
