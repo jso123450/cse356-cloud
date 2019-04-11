@@ -13,17 +13,17 @@ const AVG_ASSISTS_STATEMENT = `SELECT AVG(a) as AA FROM ${constants.MYSQL_TABLE}
 const QUERY_STATEMENT = `SELECT player, gs FROM ${constants.MYSQL_TABLE}`;
 
 function generateAAQuery(club, pos){
-    let query = AVG_ASSISTS_STATEMENT + ` WHERE club=${club} and pos=${pos}`;
+    let query = AVG_ASSISTS_STATEMENT + ` WHERE club='${club}' and pos='${pos}'`;
     return query;
 }
 
 function generateMAQuery(club, pos){
-    let query = MAX_ASSISTS_STATEMENT + ` WHERE club=${club} and pos=${pos}`;
+    let query = MAX_ASSISTS_STATEMENT + ` WHERE club='${club}' and pos='${pos}'`;
     return query;
 }
 
 function generateQuery(club, pos, max){
-    let query = QUERY_STATEMENT + ` WHERE club=${club} and pos=${pos} and a=${max} ORDER BY gs DESC LIMIT 1`;
+    let query = QUERY_STATEMENT + ` WHERE club='${club}' and pos='${pos}' and a=${max} ORDER BY gs DESC LIMIT 1`;
     return query;
 }
 
