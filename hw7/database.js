@@ -32,14 +32,14 @@ async function getAvgAssists(club, pos){
     try {
         await cnxn.connect();
         result = await cnxn.query(generateAAQuery(club,pos));
-        console.log(result);
     }
     catch(err){
-        console.log(err);
+        throw err;
     }
     finally {
         await cnxn.end();
     }
+    console.log(result);
     return result[0].aa;
 }
 
@@ -48,14 +48,14 @@ async function getMaxAssists(club, pos){
     try {
         await cnxn.connect();
         result = await cnxn.query(generateMAQuery(club,pos));
-        console.log(result);
     }
     catch(err){
-        console.log(err);
+        throw err;
     }
     finally {
         await cnxn.end();
     }
+    console.log(result);
     return result[0].ma;
 }
 
@@ -67,11 +67,12 @@ async function getStarPlayer(club, pos, max_assists){
         console.log(result);
     }
     catch(err) {
-        console.log(err);
+        throw err;
     } 
     finally {
         await cnxn.end();
     }
+    console.log(result);
     return result[0];
 }
 
