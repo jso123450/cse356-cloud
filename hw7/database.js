@@ -70,7 +70,7 @@ async function getStarPlayer(club, pos){
             max_assists = rows[0]['MA'];
             query = generateQuery(club,pos,max_assists);
             return cnxn.query(query);
-        }).then(function(rows){
+        }).then(async function(rows){
             player = rows[0]['player'];
             let cached_data = '' + avg_assists + ',' + max_assists + ',' + player;
             try {
