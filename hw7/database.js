@@ -79,7 +79,7 @@ async function getStarPlayer(club, pos){
                 max_assists = await mc.get(ma_cache);
                 max_assists = max_assists.value;
                 if (max_assists){
-                    max_assists = max_assists.readUInt8(0);
+                    max_assists = max_assists.readInt16LE(0);
                     console.log(`found cached ${ma_cache} ${max_assists}`)
                     cached = true;
                 }
