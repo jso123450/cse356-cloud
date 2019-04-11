@@ -60,7 +60,7 @@ async function getStarPlayer(club, pos){
             }
 
             try {
-                await mc.set(`aa,${club},${pos}`, avg_assists);
+                await mc.set(`aa,${club},${pos}`, {expires: 600}, avg_assists);
             } catch (err){
                 console.log(`couldn't set aa,${club},${pos}`);
                 console.log(err);
@@ -86,7 +86,7 @@ async function getStarPlayer(club, pos){
             }
 
             try {
-                await mc.set(`ma,${club},${pos}`, max_assists);
+                await mc.set(`ma,${club},${pos}`, {expires: 600}, max_assists);
             } catch (err){
                 console.log(`couldn't set ma,${club},${pos}`);
                 console.log(err);
@@ -112,7 +112,7 @@ async function getStarPlayer(club, pos){
             }
 
             try {
-                await mc.set(`player,${club},${pos}`, player);
+                await mc.set(`player,${club},${pos}`, {expires: 600}, player);
             } catch (err){
                 console.log(`couldn't set ma,${club},${pos}`);
                 console.log(err);
