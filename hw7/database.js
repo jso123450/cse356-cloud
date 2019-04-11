@@ -40,7 +40,7 @@ async function getStarPlayer(club, pos){
         star_player = await mc.get(sp_cache);
         star_player = star_player.value;
         if (star_player){
-            return JSON.parse(JSON.stringify(star_player));
+            return JSON.parse(star_player.toString());
         }
     } catch(err){
         // do nothing
