@@ -12,7 +12,7 @@ const MAX_ASSISTS_STATEMENT = `SELECT MAX(a) as MA FROM ${constants.MYSQL_TABLE}
 const AVG_ASSISTS_STATEMENT = `SELECT AVG(a) as AA FROM ${constants.MYSQL_TABLE}`;
 const QUERY_STATEMENT = `SELECT player, gs FROM ${constants.MYSQL_TABLE}`;
 
-function genereateAAQuery(club, pos){
+function generateAAQuery(club, pos){
     let query = AVG_ASSISTS_STATEMENT + ` WHERE club=${club} and pos=${pos}`;
     return query;
 }
