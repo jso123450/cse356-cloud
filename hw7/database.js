@@ -8,7 +8,7 @@ const config = {
     database: constants.MYSQL_DB
 };
 
-const MAX_ASSISTS_STATEMENT = `SELECT MAX(a) as MA FROM ${constants.MYSQL_TABLE};`
+const MAX_ASSISTS_STATEMENT = `SELECT MAX(a) as MA FROM ${constants.MYSQL_TABLE}`
 const AVG_ASSISTS_STATEMENT = `SELECT AVG(a) as AA FROM ${constants.MYSQL_TABLE}`;
 const QUERY_STATEMENT = `SELECT player, gs FROM ${constants.MYSQL_TABLE}`;
 
